@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>World Clock</title>
+
+  <!-- Three.js for 3D Earth globe -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Lucide icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+
+<body class="theme-system">
+
+  <!-- 🐦 SPARROW WINDOW (top-left, 10% bigger, click to trigger) -->
+  <div id="sparrow-window" title="Click to hear the sparrow! Auto-plays every hour 🐦">
+    <div class="window-frame">
+      <div class="window-pane left"></div>
+      <div class="window-pane right"></div>
+    </div>
+    <div id="sparrow" class="sparrow">🐦</div>
+    <div class="window-sill"></div>
+  </div>
+
+  <!-- 🔔 TIMER BELL ALERT — repeats until dismissed -->
+  <div id="bell-alert" class="bell-alert hidden">
+    <div class="bell-icon">🔔</div>
+    <span id="bell-message">Time's up!</span>
+    <button id="bell-dismiss" onclick="dismissBell()">Dismiss</button>
+  </div>
+
+  <div class="app-wrapper">
+
+    <!-- TOP BAR -->
+    <header class="top-bar">
+      <div class="header-left">
+        <i data-lucide="globe-2" class="header-icon"></i>
+        <h1 class="app-title">World Clock</h1>
+      </div>
+      <div class="header-center">
+        <div class="live-date">
+          <span id="current-day-name"></span>
+          <span id="current-date-display"></span>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="theme-switcher">
+          <button class="theme-btn" data-theme="light" title="Light Theme">
+            <i data-lucide="sun"></i>
+          </button>
+          <button class="theme-btn active" data-theme="system" title="Auto (Day/Night)">
+            <i data-lucide="monitor"></i>
+          </button>
+          <button class="theme-btn" data-theme="dark" title="Dark Theme">
+            <i data-lucide="moon"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- TAB NAVIGATION — "World Zones" renamed to "World Clock" -->
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="clock">
+        <i data-lucide="clock"></i> Clock
+      </button>
+      <button class="tab-btn" data-tab="world">
+        <i data-lucide="globe"></i> World Clock
+      </button>
+      <button class="tab-btn" data-tab="stopwatch">
+        <i data-lucide="timer"></i> Stopwatch
+      </button>
+      <button class="tab-btn" data-tab="timer">
+        <i data-lucide="hourglass"></i> Timer
+      </button>
+      <button class="tab-btn" data-tab="calendar">
+        <i data-lucide="calendar"></i> Calendar
+      </button>
+    </nav>
+
+    <!-- ══════ TAB: CLOCK ══════ -->
+    <section id="tab-clock" class="tab-content active">
+
+      <div class="welcome-strip">
+        <i data-lucide="sparkles" class="welcome-icon"></i>
+        <span id="welcome-text">Good Morning</span>
+        <span class="welcome-sub">— Your personal world clock</span>
+      </div>
+
+      <!-- Tick-tock toggle -->
+      <div class="tick-toggle">
+        <input type="checkbox" id="tick-cb" checked onchange="toggleTickSound(this.checked)"/>
+        <label for="tick-cb">🔊 Tick-tock sound every second</label>
+      </div>
+
+      <!-- Digital / Analog toggle -->
+      <div class="clock-type-toggle">
+        <button class="type-btn active" data-type="digital">
+          <i data-lucide="activity"></i> Digital
+        </button>
+        <button class="type-btn" data-type="analog">
+          <i data-lucide="clock-3"></i> Analog
+        </button>
+      </div>
+
+      <!-- 12 / 24 hour toggle -->
+      <div class="format-toggle">
+        <button class="fmt-btn active" data-fmt="12">12-Hour</button>
+        <button class="fmt-btn" data-fmt="24">24-Hour</button>
+      </div>
+
+      <!-- DIGITAL CLOCK (shown by default) -->
+      <div id="digital-clock" class="digital-clock">
+        <div class="digital-time">
+          <span id="dig-hours">00</span>
+          <span class="dig-sep blink">:</span>
+          <span id="dig-minutes">00</span>
+          <span class="dig-sep blink">:</span>
+          <span id="dig-seconds">00</span>
+          <span id="dig-ampm" class="dig-ampm">AM</span>
+        </div>
+        <div class="digital-timezone">
+          <i data-lucide="map-pin" class="tz-pin"></i>
+          <span id="dig-timezone">Local Time</span>
+        </div>
+      </div>
+
+      <!-- ANALOG CLOCK (hidden by default, shown when toggled) -->
+      <div id="analog-clock" class="analog-clock hidden">
+        <canvas id="analog-canvas" width="280" height="280"></canvas>
+        <div class="analog-label">
+          <i data-lucide="map-pin" class="tz-pin"></i>
+          <span id="analog-timezone">Local Time</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ══════ TAB: WORLD CLOCK (renamed from World Zones) ══════ -->
+    <section id="tab-world" class="tab-content hidden">
+
+      <!-- 3D Rotating Interactive Earth -->
+      <div class="globe-section">
+        <div class="section-title">
+          <i data-lucide="globe-2"></i>
+          <h2>Live Earth — Drag to Rotate</h2>
+        </div>
+        <!-- Container is taller now to avoid top/bottom clipping -->
+        <div id="globe-container"></div>
+        <p class="globe-hint">
+          <i data-lucide="info"></i>
+          Drag the globe in any direction · Click a 🔴 red pin to see timezone info
+        </p>
+      </div>
+
+      <!-- All 38 Time Zones -->
+      <div class="zones-section">
+        <div class="section-title">
+          <i data-lucide="clock"></i>
+          <h2>All 38 Time Zones</h2>
+        </div>
+        <div class="zone-search">
+          <i data-lucide="search"></i>
+          <input type="text" id="zone-search-input" placeholder="Search timezone or city..." />
+        </div>
+        <div id="zones-grid" class="zones-grid"></div>
+      </div>
+
+    </section>
+
+    <!-- ══════ TAB: STOPWATCH ══════ -->
+    <section id="tab-stopwatch" class="tab-content hidden">
+
+      <div class="section-title">
+        <i data-lucide="timer"></i>
+        <h2>Stopwatch</h2>
+      </div>
+
+      <div class="sw-display">
+        <span id="sw-hours">00</span>
+        <span class="sw-sep">:</span>
+        <span id="sw-minutes">00</span>
+        <span class="sw-sep">:</span>
+        <span id="sw-seconds">00</span>
+        <span class="sw-ms">.<span id="sw-ms">000</span></span>
+      </div>
+
+      <div class="sw-controls">
+        <button id="sw-start" class="ctrl-btn primary" onclick="swStart()">
+          <i data-lucide="play"></i> Start
+        </button>
+        <button id="sw-pause" class="ctrl-btn" onclick="swPause()" disabled>
+          <i data-lucide="pause"></i> Pause
+        </button>
+        <button id="sw-reset" class="ctrl-btn danger" onclick="swReset()">
+          <i data-lucide="rotate-ccw"></i> Reset
+        </button>
+      </div>
+
+      <div class="runner-scene">
+        <canvas id="runner-canvas" width="600" height="130"></canvas>
+        <div class="road-label">
+          <i data-lucide="flag"></i> Press Start — watch the runner go!
+        </div>
+      </div>
+
+      <div class="lap-section">
+        <button id="sw-lap" class="ctrl-btn lap" onclick="swLap()" disabled>
+          <i data-lucide="flag"></i> Lap
+        </button>
+        <div id="lap-list" class="lap-list"></div>
+      </div>
+
+    </section>
+
+    <!-- ══════ TAB: TIMER ══════ -->
+    <section id="tab-timer" class="tab-content hidden">
+
+      <div class="section-title">
+        <i data-lucide="hourglass"></i>
+        <h2>Timer</h2>
+      </div>
+
+      <div id="timer-input-section" class="timer-input-section">
+        <div class="time-inputs">
+          <div class="time-input-group">
+            <input type="number" id="timer-h" min="0" max="99" value="0"/>
+            <label>Hours</label>
+          </div>
+          <span class="ti-sep">:</span>
+          <div class="time-input-group">
+            <input type="number" id="timer-m" min="0" max="59" value="5"/>
+            <label>Minutes</label>
+          </div>
+          <span class="ti-sep">:</span>
+          <div class="time-input-group">
+            <input type="number" id="timer-s" min="0" max="59" value="0"/>
+            <label>Seconds</label>
+          </div>
+        </div>
+
+        <div class="bell-choice">
+          <label><i data-lucide="bell"></i> Choose Bell Sound (repeats until dismissed):</label>
+          <div class="bell-options">
+            <button class="bell-opt active" data-bell="1" onclick="selectBell(this,1)">🔔 Chime</button>
+            <button class="bell-opt" data-bell="2" onclick="selectBell(this,2)">🎵 Melody</button>
+            <button class="bell-opt" data-bell="3" onclick="selectBell(this,3)">🎶 Ding Dong</button>
+            <button class="bell-opt" data-bell="4" onclick="selectBell(this,4)">⏰ Alarm</button>
+            <button class="bell-opt" data-bell="5" onclick="selectBell(this,5)">🔕 Soft Bell</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sand-timer-wrap">
+        <canvas id="sand-canvas" width="160" height="220"></canvas>
+      </div>
+
+      <div id="timer-display" class="timer-display hidden">
+        <span id="t-hours">00</span>
+        <span class="sw-sep">:</span>
+        <span id="t-minutes">05</span>
+        <span class="sw-sep">:</span>
+        <span id="t-seconds">00</span>
+      </div>
+
+      <div class="sw-controls">
+        <button id="timer-start" class="ctrl-btn primary" onclick="timerStart()">
+          <i data-lucide="play"></i> Start
+        </button>
+        <button id="timer-pause" class="ctrl-btn" onclick="timerPause()" disabled>
+          <i data-lucide="pause"></i> Pause
+        </button>
+        <button id="timer-reset" class="ctrl-btn danger" onclick="timerReset()">
+          <i data-lucide="rotate-ccw"></i> Reset
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ══════ TAB: CALENDAR ══════ -->
+    <section id="tab-calendar" class="tab-content hidden">
+
+      <div class="section-title">
+        <i data-lucide="calendar-days"></i>
+        <h2>Calendar</h2>
+      </div>
+
+      <!-- Blurred background card wrapping calendar grid -->
+      <div class="cal-blur-bg">
+
+        <!-- Big blurred month/year label (background decoration) -->
+        <div id="cal-bg-label">January 2025</div>
+
+        <!-- Nav -->
+        <div class="cal-nav">
+          <button class="cal-nav-btn" onclick="calPrev()">
+            <i data-lucide="chevron-left"></i>
+          </button>
+          <div class="cal-month-year">
+            <select id="cal-month-select" onchange="calGoTo()"></select>
+            <select id="cal-year-select" onchange="calGoTo()"></select>
+          </div>
+          <button class="cal-nav-btn" onclick="calNext()">
+            <i data-lucide="chevron-right"></i>
+          </button>
+          <button class="cal-today-btn" onclick="calGoToday()">
+            <i data-lucide="calendar-check"></i> Today
+          </button>
+        </div>
+
+        <!-- Day headers -->
+        <div class="cal-day-headers">
+          <span>Sun</span><span>Mon</span><span>Tue</span>
+          <span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+        </div>
+
+        <!-- Calendar grid (filled by JS) -->
+        <div id="cal-grid" class="cal-grid"></div>
+
+        <!-- Selected date info -->
+        <div id="cal-selected-info" class="cal-selected-info">
+          <i data-lucide="info"></i>
+          <span id="cal-info-text">Click any date to see details · 👧 appears on Sundays</span>
+        </div>
+
+      </div><!-- /.cal-blur-bg -->
+
+      <!-- TIME INFO PANEL — seconds/minutes/hours/days/weeks/months facts -->
+      <div id="time-info-panel"></div>
+
+    </section>
+
+  </div><!-- /.app-wrapper -->
+
+  <!-- Night overlay: stars + moon (dark/auto-night theme) -->
+  <div id="night-overlay" class="night-overlay hidden">
+    <div id="stars-canvas-wrap">
+      <canvas id="stars-canvas"></canvas>
+    </div>
+    <div class="moon">🌙</div>
+  </div>
+
+  <!-- JavaScript files -->
+  <script src="data.js"></script>
+  <script src="clock.js"></script>
+  <script src="globe.js"></script>
+  <script src="stopwatch.js"></script>
+  <script src="timer.js"></script>
+  <script src="calendar.js"></script>
+  <script src="sparrow.js"></script>
+  <script src="theme.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

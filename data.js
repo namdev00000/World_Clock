@@ -1,0 +1,426 @@
+/* ═══════════════════════════════════════════════════
+   data.js — All 38 World Time Zones Data
+   Each entry has: name, offset (hours), IANA key,
+   description, countries, and map coordinates (lat/lng)
+═══════════════════════════════════════════════════ */
+
+const TIMEZONES = [
+  {
+    id:       1,
+    name:     "Baker Island Time",
+    abbr:     "BIT",
+    offset:   -12,
+    iana:     "Etc/GMT+12",
+    desc:     "The westernmost timezone on Earth. Used by uninhabited US islands like Baker and Howland Islands.",
+    countries: "Baker Island, Howland Island (US territories)",
+    lat:      0.2,
+    lng:      -176.5
+  },
+  {
+    id:       2,
+    name:     "Samoa Standard Time",
+    abbr:     "SST",
+    offset:   -11,
+    iana:     "Pacific/Pago_Pago",
+    desc:     "Covers American Samoa and Niue. Known for tropical beauty and traditional Polynesian culture.",
+    countries: "American Samoa, Niue",
+    lat:      -14.3,
+    lng:      -170.7
+  },
+  {
+    id:       3,
+    name:     "Hawaii-Aleutian Time",
+    abbr:     "HST",
+    offset:   -10,
+    iana:     "Pacific/Honolulu",
+    desc:     "Home to Hawaii's volcanic islands and the remote Aleutian chain of Alaska. No daylight saving.",
+    countries: "USA (Hawaii), Cook Islands",
+    lat:      21.3,
+    lng:      -157.8
+  },
+  {
+    id:       4,
+    name:     "Alaska Time",
+    abbr:     "AKST",
+    offset:   -9,
+    iana:     "America/Anchorage",
+    desc:     "Covers mainland Alaska — the largest US state by area, renowned for wilderness and the Northern Lights.",
+    countries: "USA (Alaska), French Polynesia (Gambier)",
+    lat:      61.2,
+    lng:      -149.9
+  },
+  {
+    id:       5,
+    name:     "Pacific Time",
+    abbr:     "PST",
+    offset:   -8,
+    iana:     "America/Los_Angeles",
+    desc:     "The US West Coast timezone. Home to Silicon Valley, Hollywood, and Seattle's tech industry.",
+    countries: "USA (California, Oregon, Washington), Canada (BC), Mexico (Baja California)",
+    lat:      34.0,
+    lng:      -118.2
+  },
+  {
+    id:       6,
+    name:     "Mountain Time",
+    abbr:     "MST",
+    offset:   -7,
+    iana:     "America/Denver",
+    desc:     "Covers the Rocky Mountain region including Colorado, Utah, and Arizona (which skips DST).",
+    countries: "USA (Colorado, Utah, Arizona, Montana), Canada (Alberta), Mexico",
+    lat:      39.7,
+    lng:      -104.9
+  },
+  {
+    id:       7,
+    name:     "Central Time",
+    abbr:     "CST",
+    offset:   -6,
+    iana:     "America/Chicago",
+    desc:     "Covers the American Midwest and South including the great city of Chicago and most of Mexico.",
+    countries: "USA (Illinois, Texas), Canada (Manitoba), Mexico, Central America",
+    lat:      41.9,
+    lng:      -87.6
+  },
+  {
+    id:       8,
+    name:     "Eastern Time",
+    abbr:     "EST",
+    offset:   -5,
+    iana:     "America/New_York",
+    desc:     "The most populated US timezone. Home to New York City, Washington D.C., and Miami.",
+    countries: "USA (NY, FL, DC), Canada (Ontario, Quebec), Cuba, Haiti, Jamaica",
+    lat:      40.7,
+    lng:      -74.0
+  },
+  {
+    id:       9,
+    name:     "Venezuela Time",
+    abbr:     "VET",
+    offset:   -4.5,
+    iana:     "America/Caracas",
+    desc:     "Venezuela uses a unique UTC−4:30 offset, set in 2007 to maximize daylight for the population.",
+    countries: "Venezuela",
+    lat:      10.5,
+    lng:      -66.9
+  },
+  {
+    id:       10,
+    name:     "Atlantic Time",
+    abbr:     "AST",
+    offset:   -4,
+    iana:     "America/Halifax",
+    desc:     "Eastern Canada and the Caribbean. Includes Puerto Rico, Barbados, and the Lesser Antilles.",
+    countries: "Canada (NS, NB), Puerto Rico, Dominican Republic, Barbados",
+    lat:      44.6,
+    lng:      -63.6
+  },
+  {
+    id:       11,
+    name:     "Brasília Time",
+    abbr:     "BRT",
+    offset:   -3,
+    iana:     "America/Sao_Paulo",
+    desc:     "Brazil's main timezone, covering São Paulo and Rio de Janeiro — two of South America's largest cities.",
+    countries: "Brazil (most), Argentina, Uruguay, Chile",
+    lat:      -23.5,
+    lng:      -46.6
+  },
+  {
+    id:       12,
+    name:     "Fernando de Noronha Time",
+    abbr:     "FNT",
+    offset:   -2,
+    iana:     "America/Noronha",
+    desc:     "A rarely-used offset covering the remote Brazilian archipelago of Fernando de Noronha.",
+    countries: "Brazil (Fernando de Noronha), South Georgia",
+    lat:      -3.9,
+    lng:      -32.4
+  },
+  {
+    id:       13,
+    name:     "Azores Time",
+    abbr:     "AZOT",
+    offset:   -1,
+    iana:     "Atlantic/Azores",
+    desc:     "The Azores are a beautiful volcanic Portuguese archipelago in the mid-Atlantic Ocean.",
+    countries: "Portugal (Azores), Cape Verde",
+    lat:      37.7,
+    lng:      -25.7
+  },
+  {
+    id:       14,
+    name:     "Greenwich Mean Time",
+    abbr:     "GMT",
+    offset:   0,
+    iana:     "UTC",
+    desc:     "The world's time standard. Originates from the Royal Observatory in Greenwich, London.",
+    countries: "UK (winter), Ireland, Iceland, Ghana, Senegal, Togo, Guinea",
+    lat:      51.5,
+    lng:      -0.1
+  },
+  {
+    id:       15,
+    name:     "Central European Time",
+    abbr:     "CET",
+    offset:   1,
+    iana:     "Europe/Paris",
+    desc:     "Covers most of Western and Central Europe. Home to Paris, Rome, Berlin, Madrid, and Amsterdam.",
+    countries: "France, Germany, Italy, Spain, Poland, Netherlands, Belgium, Austria",
+    lat:      48.9,
+    lng:      2.3
+  },
+  {
+    id:       16,
+    name:     "Eastern European Time",
+    abbr:     "EET",
+    offset:   2,
+    iana:     "Europe/Bucharest",
+    desc:     "Eastern Europe and the Middle East. Covers Greece, Romania, Israel, and Egypt.",
+    countries: "Greece, Romania, Bulgaria, Ukraine, Israel, Egypt, South Africa",
+    lat:      44.4,
+    lng:      26.1
+  },
+  {
+    id:       17,
+    name:     "Moscow Time",
+    abbr:     "MSK",
+    offset:   3,
+    iana:     "Europe/Moscow",
+    desc:     "Russia's main time zone. Moscow, St. Petersburg, and most of western Russia observe this time.",
+    countries: "Russia (west), Turkey, Saudi Arabia, Kenya, Ethiopia, Iraq",
+    lat:      55.8,
+    lng:      37.6
+  },
+  {
+    id:       18,
+    name:     "Iran Standard Time",
+    abbr:     "IRST",
+    offset:   3.5,
+    iana:     "Asia/Tehran",
+    desc:     "Iran uses a unique UTC+3:30 offset, one of the few countries with a half-hour deviation.",
+    countries: "Iran",
+    lat:      35.7,
+    lng:      51.4
+  },
+  {
+    id:       19,
+    name:     "Gulf Standard Time",
+    abbr:     "GST",
+    offset:   4,
+    iana:     "Asia/Dubai",
+    desc:     "The Gulf region including the UAE, Oman, and Azerbaijan. Dubai is a major global hub here.",
+    countries: "UAE, Oman, Azerbaijan, Armenia, Georgia, Reunion (France)",
+    lat:      25.2,
+    lng:      55.3
+  },
+  {
+    id:       20,
+    name:     "Afghanistan Time",
+    abbr:     "AFT",
+    offset:   4.5,
+    iana:     "Asia/Kabul",
+    desc:     "Afghanistan uses UTC+4:30, a unique offset for this landlocked South-Central Asian nation.",
+    countries: "Afghanistan",
+    lat:      34.5,
+    lng:      69.2
+  },
+  {
+    id:       21,
+    name:     "Pakistan Standard Time",
+    abbr:     "PKT",
+    offset:   5,
+    iana:     "Asia/Karachi",
+    desc:     "Covers Pakistan and parts of Central Asia. Karachi is one of the world's most populous cities.",
+    countries: "Pakistan, Uzbekistan, Tajikistan, Turkmenistan",
+    lat:      24.9,
+    lng:      67.0
+  },
+  {
+    id:       22,
+    name:     "India Standard Time",
+    abbr:     "IST",
+    offset:   5.5,
+    iana:     "Asia/Kolkata",
+    desc:     "India uses a single timezone for the entire country — UTC+5:30. Home to 1.4 billion people.",
+    countries: "India, Sri Lanka",
+    lat:      28.6,
+    lng:      77.2
+  },
+  {
+    id:       23,
+    name:     "Nepal Time",
+    abbr:     "NPT",
+    offset:   5.75,
+    iana:     "Asia/Kathmandu",
+    desc:     "Nepal has the rare UTC+5:45 offset — a 15-minute deviation. Home to Mount Everest.",
+    countries: "Nepal",
+    lat:      27.7,
+    lng:      85.3
+  },
+  {
+    id:       24,
+    name:     "Bangladesh Time",
+    abbr:     "BST",
+    offset:   6,
+    iana:     "Asia/Dhaka",
+    desc:     "Bangladesh and Central Asian countries. Dhaka is one of the most densely populated cities on Earth.",
+    countries: "Bangladesh, Kazakhstan, Kyrgyzstan, Bhutan, Maldives",
+    lat:      23.7,
+    lng:      90.4
+  },
+  {
+    id:       25,
+    name:     "Myanmar Time",
+    abbr:     "MMT",
+    offset:   6.5,
+    iana:     "Asia/Yangon",
+    desc:     "Myanmar (Burma) uses UTC+6:30, a half-hour offset nation with rich Buddhist heritage.",
+    countries: "Myanmar (Burma), Cocos (Keeling) Islands",
+    lat:      16.9,
+    lng:      96.2
+  },
+  {
+    id:       26,
+    name:     "Indochina Time",
+    abbr:     "ICT",
+    offset:   7,
+    iana:     "Asia/Bangkok",
+    desc:     "Southeast Asian mainland. Bangkok, Hanoi, and Jakarta are key cities in this timezone.",
+    countries: "Thailand, Vietnam, Cambodia, Laos, Indonesia (west)",
+    lat:      13.7,
+    lng:      100.5
+  },
+  {
+    id:       27,
+    name:     "China Standard Time",
+    abbr:     "CST",
+    offset:   8,
+    iana:     "Asia/Shanghai",
+    desc:     "China uses a single timezone despite its vast size. Also covers Singapore and Malaysia.",
+    countries: "China, Singapore, Malaysia, Philippines, Taiwan, Hong Kong, Macau, Western Australia",
+    lat:      31.2,
+    lng:      121.5
+  },
+  {
+    id:       28,
+    name:     "Australian Central Western Time",
+    abbr:     "ACWST",
+    offset:   8.75,
+    iana:     "Australia/Eucla",
+    desc:     "The Eucla region of Australia uses the unusual UTC+8:45, one of the world's oddest offsets.",
+    countries: "Australia (Eucla region)",
+    lat:      -31.7,
+    lng:      128.9
+  },
+  {
+    id:       29,
+    name:     "Japan Standard Time",
+    abbr:     "JST",
+    offset:   9,
+    iana:     "Asia/Tokyo",
+    desc:     "Japan and South Korea share this timezone. Tokyo is the world's most populous metropolitan area.",
+    countries: "Japan, South Korea, North Korea, Indonesia (east Maluku)",
+    lat:      35.7,
+    lng:      139.7
+  },
+  {
+    id:       30,
+    name:     "Australian Central Time",
+    abbr:     "ACST",
+    offset:   9.5,
+    iana:     "Australia/Adelaide",
+    desc:     "The Northern Territory and South Australia use UTC+9:30. Darwin and Adelaide are key cities.",
+    countries: "Australia (SA, NT)",
+    lat:      -34.9,
+    lng:      138.6
+  },
+  {
+    id:       31,
+    name:     "Australian Eastern Time",
+    abbr:     "AEST",
+    offset:   10,
+    iana:     "Australia/Sydney",
+    desc:     "Eastern Australia's timezone. Sydney, Melbourne, and Brisbane — Australia's biggest cities.",
+    countries: "Australia (NSW, VIC, QLD), Papua New Guinea",
+    lat:      -33.9,
+    lng:      151.2
+  },
+  {
+    id:       32,
+    name:     "Lord Howe Island Time",
+    abbr:     "LHST",
+    offset:   10.5,
+    iana:     "Australia/Lord_Howe",
+    desc:     "Lord Howe Island is a tiny Australian island with a unique UTC+10:30 offset. A UNESCO World Heritage site.",
+    countries: "Australia (Lord Howe Island)",
+    lat:      -31.5,
+    lng:      159.1
+  },
+  {
+    id:       33,
+    name:     "Solomon Islands Time",
+    abbr:     "SBT",
+    offset:   11,
+    iana:     "Pacific/Guadalcanal",
+    desc:     "Pacific island chains. Noumea (New Caledonia) and Honiara (Solomon Islands) are key cities.",
+    countries: "Solomon Islands, Vanuatu, New Caledonia (France)",
+    lat:      -9.4,
+    lng:      160.0
+  },
+  {
+    id:       34,
+    name:     "Norfolk Island Time",
+    abbr:     "NFT",
+    offset:   11.5,
+    iana:     "Pacific/Norfolk",
+    desc:     "Norfolk Island, a remote Australian territory in the South Pacific, uses this unique half-hour offset.",
+    countries: "Australia (Norfolk Island)",
+    lat:      -29.0,
+    lng:      167.9
+  },
+  {
+    id:       35,
+    name:     "New Zealand Standard Time",
+    abbr:     "NZST",
+    offset:   12,
+    iana:     "Pacific/Auckland",
+    desc:     "New Zealand and Fiji. Auckland is the first major city to greet each new day as it starts at midnight UTC+12.",
+    countries: "New Zealand, Fiji, Nauru, Marshall Islands",
+    lat:      -36.9,
+    lng:      174.8
+  },
+  {
+    id:       36,
+    name:     "Chatham Islands Time",
+    abbr:     "CHAST",
+    offset:   12.75,
+    iana:     "Pacific/Chatham",
+    desc:     "New Zealand's Chatham Islands use UTC+12:45, one of only two UTC+12:45 zones on Earth.",
+    countries: "New Zealand (Chatham Islands)",
+    lat:      -44.0,
+    lng:      -176.5
+  },
+  {
+    id:       37,
+    name:     "Tonga Time",
+    abbr:     "TOT",
+    offset:   13,
+    iana:     "Pacific/Tongatapu",
+    desc:     "Tonga and Samoa (independent) are among the last places on Earth in terms of UTC offset.",
+    countries: "Tonga, Samoa (independent), Kiribati (Phoenix Islands)",
+    lat:      -21.1,
+    lng:      -175.2
+  },
+  {
+    id:       38,
+    name:     "Line Islands Time",
+    abbr:     "LINT",
+    offset:   14,
+    iana:     "Pacific/Kiritimati",
+    desc:     "Kiritimati (Christmas Island) in Kiribati holds the title of the farthest-ahead timezone: UTC+14.",
+    countries: "Kiribati (Line Islands)",
+    lat:      1.9,
+    lng:      -157.5
+  }
+];
